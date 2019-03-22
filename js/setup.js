@@ -54,3 +54,47 @@ var showSimilarWizardsWindow = function () {
 createWizards(wizards, wizardsQuantity);
 insertWizards(wizards, setupWindowWizardsList);
 showSimilarWizardsWindow();
+
+// module4-task1
+var setupOpenButton = document.querySelector('.setup-open-icon');
+var setupCloseButton = document.querySelector('.setup-close');
+var ESC_KEY = 27;
+var ENTER_KEY = 13;
+
+var onPopupEscPress = function (evt) {
+  debugger;
+  // var clickedElement = evt.currentTarget;
+  if (evt.keyCode === ESC_KEY/* && clickedElement.classList.contains('setup-user-name')*/) {
+    setupWindow.classList.add('hidden');
+  }
+};
+
+var closePopup = function () {
+  setupWindow.classList.add('hidden');
+  document.removeEventListener('keydown', onPopupEscPress);
+};
+
+var openPopup = function () {
+  setupWindow.classList.remove('hidden');
+  document.addEventListener('keydown', onPopupEscPress);
+};
+
+setupOpenButton.addEventListener('click', function () {
+  openPopup();
+});
+
+setupOpenButton.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ENTER_KEY) {
+    openPopup();
+  }
+});
+
+setupCloseButton.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ENTER_KEY) {
+    closePopup();
+  }
+});
+
+setupCloseButton.addEventListener('click', function () {
+  closePopup();
+});
