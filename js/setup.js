@@ -5,31 +5,27 @@ var WIZARD_SURNAMES = ['да Марья', 'Верон', 'Мирабелла', '�
 var COAT_COLORS = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
 var EYE_COLORS = ['black', 'red', 'blue', 'yellow', 'green'];
 var FIREBALL_COLORS = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
-var ESC_KEY = 27;
 var ENTER_KEY = 13;
 var setupWindow = document.querySelector('.setup');
 var setupWindowWizards = setupWindow.querySelector('.setup-similar');
 var setupWindowWizardsList = setupWindow.querySelector('.setup-similar-list');
-var wizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
-var setupOpenButton = document.querySelector('.setup-open-icon');
-var setupCloseButton = document.querySelector('.setup-close');
 var userCoat = setupWindow.querySelector('.setup-wizard .wizard-coat');
 var userEyes = setupWindow.querySelector('.setup-wizard .wizard-eyes');
 var userFireball = setupWindow.querySelector('.setup-fireball-wrap');
+var wizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
+var setupOpenButton = document.querySelector('.setup-open-icon');
+var setupCloseButton = document.querySelector('.setup-close');
 var wizardsQuantity = 4;
 var wizards = new Array(wizardsQuantity);
 
-var getRandomNumber = function (minNumber, maxNumber) {
-  return Math.floor(Math.random() * (maxNumber - minNumber) + minNumber);
-};
-
+// создаём магов
 var createWizards = function (wizardsArray, number) {
   for (var i = 0; i < number; i++) {
     wizardsArray[i] = {
-      name: WIZARD_NAMES[getRandomNumber(0, WIZARD_NAMES.length - 1)],
-      surname: WIZARD_SURNAMES[getRandomNumber(0, WIZARD_SURNAMES.length - 1)],
-      coatColor: COAT_COLORS[getRandomNumber(0, COAT_COLORS.length - 1)],
-      eyesColor: EYE_COLORS[getRandomNumber(0, EYE_COLORS.length - 1)]
+      name: WIZARD_NAMES[window.util.getRandomNumber(0, WIZARD_NAMES.length - 1)],
+      surname: WIZARD_SURNAMES[window.util.getRandomNumber(0, WIZARD_SURNAMES.length - 1)],
+      coatColor: COAT_COLORS[window.util.getRandomNumber(0, COAT_COLORS.length - 1)],
+      eyesColor: EYE_COLORS[window.util.getRandomNumber(0, EYE_COLORS.length - 1)]
     };
   }
 
@@ -55,62 +51,41 @@ var insertWizards = function (wizardsArray, insertElement) {
 };
 
 var showSimilarWizardsWindow = function () {
-  openPopup();
+  window.util.openPopup();
   setupWindowWizards.classList.remove('hidden');
 };
 
-var onPopupEscPress = function (evt) {
-  if (!evt.target.classList.contains('setup-user-name') && evt.keyCode === ESC_KEY) {
-    setupWindow.classList.add('hidden');
-  }
-};
-
-var closePopup = function () {
-  setupWindow.classList.add('hidden');
-  document.removeEventListener('keydown', onPopupEscPress);
-};
-
-var openPopup = function () {
-  setupWindow.classList.remove('hidden');
-  document.addEventListener('keydown', onPopupEscPress);
-};
-
-var changeColor = function (itemToChange, colorsArray) {
-  itemToChange.style.fill = colorsArray[getRandomNumber(0, colorsArray.length)];
-  return itemToChange;
-};
-
 var changeCoatColor = function () {
-  return changeColor(userCoat, COAT_COLORS);
+  return window.util.changeColor(userCoat, COAT_COLORS);
 };
 
 var changeEyesColor = function () {
-  return changeColor(userEyes, EYE_COLORS);
+  return window.util.changeColor(userEyes, EYE_COLORS);
 };
 
 var changeFireballColor = function () {
-  userFireball.style.backgroundColor = FIREBALL_COLORS[getRandomNumber(0, FIREBALL_COLORS.length)];
+  userFireball.style.backgroundColor = FIREBALL_COLORS[window.util.getRandomNumber(0, FIREBALL_COLORS.length)];
   return userFireball;
 };
 
 setupOpenButton.addEventListener('click', function () {
-  openPopup();
+  window.util.openPopup();
 });
 
 setupOpenButton.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ENTER_KEY) {
-    openPopup();
+    window.util.openPopup();
   }
 });
 
 setupCloseButton.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ENTER_KEY) {
-    closePopup();
+    window.util.closePopup();
   }
 });
 
 setupCloseButton.addEventListener('click', function () {
-  closePopup();
+  window.util.closePopup();
 });
 
 userCoat.addEventListener('click', changeCoatColor);
