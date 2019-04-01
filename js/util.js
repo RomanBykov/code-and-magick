@@ -3,6 +3,7 @@
 (function () {
   var setupWindow = document.querySelector('.setup');
   var ESC_KEY = 27;
+  var ENTER_KEY = 13;
 
   var getRandomNumber = function (minNumber, maxNumber) {
     return Math.floor(Math.random() * (maxNumber - minNumber) + minNumber);
@@ -33,6 +34,8 @@
     getRandomNumber: getRandomNumber,
     openPopup: openPopup,
     closePopup: closePopup,
-    changeColor: changeColor
+    changeColor: changeColor,
+    ENTER_KEY: ENTER_KEY,
+    ESC_KEY: ESC_KEY
   };
 })();
