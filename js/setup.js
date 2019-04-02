@@ -28,7 +28,6 @@
     wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
     wizardElement.querySelector('.wizard-coat').style.fill = wizard.coatColor;
     wizardElement.querySelector('.wizard-eyes').style.fill = wizard.eyesColor;
-
     return wizardElement;
   };
 
@@ -38,7 +37,6 @@
     for (var j = 0; j < wizardsArray.length; j++) {
       fragment.appendChild(renderWizard(wizardsArray[j]));
     }
-
     return insertElement.appendChild(fragment);
   };
 
@@ -47,6 +45,47 @@
     window.util.openPopup();
     setupWindowWizards.classList.remove('hidden');
   };
+
+  // module5-task2
+  var shopElement = document.querySelector('.setup-artifacts-shop');
+  var artifactsElement = document.querySelector('.setup-artifacts');
+  var draggedItem = null;
+
+  shopElement.addEventListener('dragstart', function (evt) {
+    if (evt.target.tagName.toLowerCase() === 'img') {
+      draggedItem = evt.target;
+      evt.dataTransfer.setData('text/plain', evt.target.alt);
+      artifactsElement.style.outline = '2px dashed red';
+    }
+  });
+
+  artifactsElement.addEventListener('dragover', function (evt) {
+    evt.preventDefault();
+    return false;
+  });
+
+  artifactsElement.addEventListener('drop', function (evt) {
+    evt.preventDefault();
+    if (evt.target.tagName.toLowerCase() !== 'img') {
+      evt.target.style.backgroundColor = '';
+      var clonedArtifact = draggedItem.cloneNode(true);
+      clonedArtifact.setAttribute('draggable', false);
+      evt.target.appendChild(clonedArtifact);
+    }
+    artifactsElement.style.outline = 'none';
+  });
+
+  artifactsElement.addEventListener('dragenter', function (evt) {
+    if (evt.target.tagName.toLowerCase() !== 'img' && !evt.target.hasChildNodes()) {
+      evt.target.style.backgroundColor = 'yellow';
+    }
+    evt.preventDefault();
+  });
+
+  artifactsElement.addEventListener('dragleave', function (evt) {
+    evt.target.style.backgroundColor = '';
+    evt.preventDefault();
+  });
 
   createWizards(wizards, wizardsQuantity);
   insertWizards(wizards, setupWindowWizardsList);
