@@ -33,16 +33,20 @@
     document.addEventListener('keydown', onPopupEscPress);
   };
 
-  var changeColor = function (itemToChange, colorsArray) {
-    itemToChange.style.fill = colorsArray[window.util.getRandomNumber(0, colorsArray.length)];
-    return itemToChange;
+  var fillElement = function (element, color) {
+    element.style.fill = color;
+  };
+
+  var changeElementBackground = function (element, color) {
+    element.style.backgroundColor = color;
   };
 
   window.util = {
     getRandomNumber: getRandomNumber,
     openPopup: openPopup,
     closePopup: closePopup,
-    changeColor: changeColor,
+    fillElement: fillElement,
+    changeElementBackground: changeElementBackground,
     ENTER_KEY: ENTER_KEY,
     ESC_KEY: ESC_KEY
   };

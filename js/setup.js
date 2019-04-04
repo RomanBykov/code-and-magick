@@ -5,6 +5,9 @@
   var setupWindowWizards = setupWindow.querySelector('.setup-similar');
   var setupWindowWizardsList = setupWindow.querySelector('.setup-similar-list');
   var wizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
+  var userCoat = setupWindow.querySelector('.setup-wizard .wizard-coat');
+  var userEyes = setupWindow.querySelector('.setup-wizard .wizard-eyes');
+  var userFireball = setupWindow.querySelector('.setup-fireball-wrap');
   var wizardsQuantity = 4;
   var wizards = new Array(wizardsQuantity);
 
@@ -46,48 +49,12 @@
     setupWindowWizards.classList.remove('hidden');
   };
 
-  // module5-task2
-  var shopElement = document.querySelector('.setup-artifacts-shop');
-  var artifactsElement = document.querySelector('.setup-artifacts');
-  var draggedItem = null;
-
-  shopElement.addEventListener('dragstart', function (evt) {
-    if (evt.target.tagName.toLowerCase() === 'img') {
-      draggedItem = evt.target;
-      evt.dataTransfer.setData('text/plain', evt.target.alt);
-      artifactsElement.style.outline = '2px dashed red';
-    }
-  });
-
-  artifactsElement.addEventListener('dragover', function (evt) {
-    evt.preventDefault();
-    return false;
-  });
-
-  artifactsElement.addEventListener('drop', function (evt) {
-    evt.preventDefault();
-    if (evt.target.tagName.toLowerCase() !== 'img') {
-      evt.target.style.backgroundColor = '';
-      var clonedArtifact = draggedItem.cloneNode(true);
-      clonedArtifact.setAttribute('draggable', false);
-      evt.target.appendChild(clonedArtifact);
-    }
-    artifactsElement.style.outline = 'none';
-  });
-
-  artifactsElement.addEventListener('dragenter', function (evt) {
-    if (evt.target.tagName.toLowerCase() !== 'img' && !evt.target.hasChildNodes()) {
-      evt.target.style.backgroundColor = 'yellow';
-    }
-    evt.preventDefault();
-  });
-
-  artifactsElement.addEventListener('dragleave', function (evt) {
-    evt.target.style.backgroundColor = '';
-    evt.preventDefault();
-  });
-
   createWizards(wizards, wizardsQuantity);
   insertWizards(wizards, setupWindowWizardsList);
   showSimilarWizardsWindow();
+
+  // кастомизация цветов волшебника (глаза, плащ, фаербол)
+  window.colorizeElement.colorizeElement(userCoat, window.data.COAT_COLORS, window.util.fillElement);
+  window.colorizeElement.colorizeElement(userEyes, window.data.EYE_COLORS, window.util.fillElement);
+  window.colorizeElement.colorizeElement(userFireball, window.data.FIREBALL_COLORS, window.util.changeElementBackground);
 })();
