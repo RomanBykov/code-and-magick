@@ -33,20 +33,11 @@
     document.addEventListener('keydown', onPopupEscPress);
   };
 
-  var fillElement = function (element, color) {
-    element.style.fill = color;
-  };
-
-  var changeElementBackground = function (element, color) {
-    element.style.backgroundColor = color;
-  };
 
   window.util = {
     getRandomNumber: getRandomNumber,
     openPopup: openPopup,
     closePopup: closePopup,
-    fillElement: fillElement,
-    changeElementBackground: changeElementBackground,
     ENTER_KEY: ENTER_KEY,
     ESC_KEY: ESC_KEY
   };
