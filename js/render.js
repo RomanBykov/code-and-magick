@@ -21,7 +21,16 @@
     setupWindowWizards.classList.remove('hidden');
   };
 
+  var removeNodeChilds = function (parentElement) {
+    while (parentElement.firstChild) {
+      parentElement.removeChild(parentElement.firstChild);
+    }
+  };
+
+  showSimilarWizardsWindow();
+
   window.render = function (data) {
+    removeNodeChilds(setupWindowWizardsList);
     var takeNumber = data.length > wizardsQuantity ? wizardsQuantity : data.length;
     var fragment = document.createDocumentFragment();
 
@@ -30,6 +39,6 @@
     }
 
     setupWindowWizardsList.appendChild(fragment);
-    showSimilarWizardsWindow();
+    // showSimilarWizardsWindow();
   };
 })();

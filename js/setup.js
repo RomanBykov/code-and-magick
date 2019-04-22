@@ -7,8 +7,8 @@
   var userFireball = setupWindow.querySelector('.setup-fireball-wrap');
   var form = document.querySelector('.setup-wizard-form');
   var wizards = [];
-  var eyesColor;
-  var coatColor;
+  var eyesColor = '';
+  var coatColor = '';
 
   // вставка похожих персонажей, которые были получены с сервера, в диалоговое окно
   var succesHandler = function (data) {
@@ -36,17 +36,36 @@
   //   element.style.fill = color;
   // };
 
+  var updateWizards = function () {
+    var sameCoatWizards = wizards.filter(function (item) {
+      return item.colorCoat === coatColor;
+    });
+
+    var sameEyesWizards = wizards.filter(function (item) {
+      return item.colorEyes === eyesColor;
+    });
+
+    var filteredWizards = sameCoatWizards.concat(sameEyesWizards).concat(wizards);
+
+    var uniqueWizards = filteredWizards.filter(function (item, i) {
+      return filteredWizards.indexOf(item) === i;
+    });
+
+    window.render(uniqueWizards);
+  };
+
   var fillCoat = function (element, color) {
     element.style.fill = color;
     coatColor = color;
-    console.log('coat: ' + coatColor);
+    updateWizards();
   };
 
   var fillEyes = function (element, color) {
     element.style.fill = color;
     eyesColor = color;
-    console.log('eyes: ' + eyesColor);
+    updateWizards();
   };
+
 
   var changeElementBackground = function (element, color) {
     element.style.backgroundColor = color;
