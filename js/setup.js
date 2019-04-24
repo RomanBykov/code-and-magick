@@ -9,12 +9,8 @@
   var wizards = [];
   var eyesColor = '';
   var coatColor = '';
+  // console.log(coatColor);
 
-  // вставка похожих персонажей, которые были получены с сервера, в диалоговое окно
-  var succesHandler = function (data) {
-    wizards = data;
-    window.render(wizards);
-  };
 
   // обработка ошибок
   var errorHandler = function (errorMessage) {
@@ -69,6 +65,13 @@
 
   var changeElementBackground = function (element, color) {
     element.style.backgroundColor = color;
+  };
+
+  // вставка похожих персонажей, которые были получены с сервера, в диалоговое окно
+  var succesHandler = function (data) {
+    wizards = data;
+    window.render(wizards);
+    // updateWizards();
   };
 
   // кастомизация цветов волшебника (глаза, плащ, фаербол)

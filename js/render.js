@@ -32,10 +32,12 @@
   window.render = function (data) {
     removeNodeChilds(setupWindowWizardsList);
     var takeNumber = data.length > wizardsQuantity ? wizardsQuantity : data.length;
+    // setupWindowWizardsList.innerHTML = '';
     var fragment = document.createDocumentFragment();
 
     for (var i = 0; i < takeNumber; i++) {
-      fragment.appendChild(renderWizard(data[window.util.getRandomNumber(0, data.length)]));
+      fragment.appendChild(renderWizard(data[i]));
+      // setupWindowWizardsList.appendChild(renderWizard(data[i]));
     }
 
     setupWindowWizardsList.appendChild(fragment);
