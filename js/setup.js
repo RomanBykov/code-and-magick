@@ -2,41 +2,13 @@
 
 (function () {
   var setupWindow = document.querySelector('.setup');
-  var setupWindowWizards = setupWindow.querySelector('.setup-similar');
-  var setupWindowWizardsList = setupWindow.querySelector('.setup-similar-list');
-  var wizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
   var userCoat = setupWindow.querySelector('.setup-wizard .wizard-coat');
   var userEyes = setupWindow.querySelector('.setup-wizard .wizard-eyes');
   var userFireball = setupWindow.querySelector('.setup-fireball-wrap');
   var form = document.querySelector('.setup-wizard-form');
-  var wizardsQuantity = 4;
-
-  // отрисовка магов
-  var renderWizard = function (wizard) {
-    var wizardElement = wizardTemplate.cloneNode(true);
-    wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
-    wizardElement.querySelector('.wizard-coat').style.fill = wizard.colorCoat;
-    wizardElement.querySelector('.wizard-eyes').style.fill = wizard.colorEyes;
-    return wizardElement;
-  };
-
-  // показ похожих магов
-  var showSimilarWizardsWindow = function () {
-    window.util.openPopup();
-    setupWindowWizards.classList.remove('hidden');
-  };
-
-  // вставка похожих персонажей, которые были получены с сервера, в диалоговое окно
-  var succesHandler = function (wizards) {
-    var fragment = document.createDocumentFragment();
-
-    for (var i = 0; i < wizardsQuantity; i++) {
-      fragment.appendChild(renderWizard(wizards[window.util.getRandomNumber(0, wizards.length)]));
-    }
-
-    setupWindowWizardsList.appendChild(fragment);
-    showSimilarWizardsWindow();
-  };
+  var wizards = [];
+  var eyesColor = '';
+  var coatColor = '';
 
   // обработка ошибок
   var errorHandler = function (errorMessage) {
@@ -54,10 +26,67 @@
     evt.preventDefault();
   };
 
+  var getRank = function (wizard) {
+    var rank = 0;
+
+    if (wizard.colorCoat === coatColor) {
+      rank += 2;
+    }
+
+    if (wizard.colorEyes === eyesColor) {
+      rank += 1;
+    }
+
+    return rank;
+  };
+
+  // var namesComparator = function (left, right) {
+  //   if (left > right) {
+  //     return 1;
+  //   } else if (left < right) {
+  //     return -1;
+  //   } else {
+  //     return 0;
+  //   }
+  // };
+
+  var updateWizards = function () {
+    window.render(wizards.slice().sort(function (left, right) {
+      var rankDiff = getRank(right) - getRank(left);
+      if (rankDiff === 0) {
+        rankDiff = wizards.indexOf(left) - wizards.indexOf(right);
+      }
+      return rankDiff;
+    }));
+  };
+
+
+  window.wizard.onEyesChange = function (element, color) {
+    element.style.fill = color;
+    eyesColor = color;
+    window.debounce(updateWizards);
+  };
+
+  window.wizard.onCoatChange = function (element, color) {
+    element.style.fill = color;
+    coatColor = color;
+    window.debounce(updateWizards);
+  };
+
+  var changeElementBackground = function (element, color) {
+    element.style.backgroundColor = color;
+  };
+
+  // вставка похожих персонажей, которые были получены с сервера, в диалоговое окно
+  var succesHandler = function (data) {
+    wizards = data;
+    window.render(wizards);
+  };
+
   // кастомизация цветов волшебника (глаза, плащ, фаербол)
-  window.colorizeElement.colorizeElement(userCoat, window.data.COAT_COLORS, window.util.fillElement);
-  window.colorizeElement.colorizeElement(userEyes, window.data.EYE_COLORS, window.util.fillElement);
-  window.colorizeElement.colorizeElement(userFireball, window.data.FIREBALL_COLORS, window.util.changeElementBackground);
+  window.colorizeElement(userCoat, window.data.COAT_COLORS, window.wizard.onCoatChange);
+  window.colorizeElement(userEyes, window.data.EYE_COLORS, window.wizard.onEyesChange);
+  window.colorizeElement(userFireball, window.data.FIREBALL_COLORS, changeElementBackground);
 
   // работа с сервером
   window.backend.load(succesHandler, errorHandler); // загрузка данных с сервера

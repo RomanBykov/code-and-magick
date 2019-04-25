@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var colorizeElement = function (element, colors, callback) {
+  window.colorizeElement = function (element, colors, callback) {
     element.addEventListener('click', function () {
       var resultColor = colors[window.util.getRandomNumber(0, colors.length)];
 
@@ -9,9 +9,5 @@
         callback(element, resultColor);
       }
     });
-  };
-
-  window.colorizeElement = {
-    colorizeElement: colorizeElement
   };
 })();
