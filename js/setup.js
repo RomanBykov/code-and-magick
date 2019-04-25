@@ -9,8 +9,6 @@
   var wizards = [];
   var eyesColor = '';
   var coatColor = '';
-  // console.log(coatColor);
-
 
   // обработка ошибок
   var errorHandler = function (errorMessage) {
@@ -28,10 +26,6 @@
     evt.preventDefault();
   };
 
-  // var fillElement = function (element, color) {
-  //   element.style.fill = color;
-  // };
-
   var getRank = function (wizard) {
     var rank = 0;
 
@@ -46,36 +40,37 @@
     return rank;
   };
 
-  var namesComparator = function (left, right) {
-    if (left > right) {
-      return 1;
-    } else if ( left < right) {
-      return -1;
-    } else {
-      return 0;
-    }
-  };
+  // var namesComparator = function (left, right) {
+  //   if (left > right) {
+  //     return 1;
+  //   } else if (left < right) {
+  //     return -1;
+  //   } else {
+  //     return 0;
+  //   }
+  // };
 
   var updateWizards = function () {
-    window.render(wizards.sort(function (left, right) {
+    window.render(wizards.slice().sort(function (left, right) {
       var rankDiff = getRank(right) - getRank(left);
       if (rankDiff === 0) {
-        rankDiff = namesComparator(left.name, right.name);
+        rankDiff = wizards.indexOf(left) - wizards.indexOf(right);
       }
       return rankDiff;
     }));
   };
 
-  var fillCoat = function (element, color) {
-    element.style.fill = color;
-    coatColor = color;
-    updateWizards();
-  };
 
-  var fillEyes = function (element, color) {
+  window.wizard.onEyesChange = function (element, color) {
     element.style.fill = color;
     eyesColor = color;
-    updateWizards();
+    window.debounce(updateWizards);
+  };
+
+  window.wizard.onCoatChange = function (element, color) {
+    element.style.fill = color;
+    coatColor = color;
+    window.debounce(updateWizards);
   };
 
   var changeElementBackground = function (element, color) {
@@ -86,14 +81,12 @@
   var succesHandler = function (data) {
     wizards = data;
     window.render(wizards);
-    // updateWizards();
   };
 
   // кастомизация цветов волшебника (глаза, плащ, фаербол)
-  window.colorizeElement(userCoat, window.data.COAT_COLORS, fillCoat);
-  window.colorizeElement(userEyes, window.data.EYE_COLORS, fillEyes);
+  window.colorizeElement(userCoat, window.data.COAT_COLORS, window.wizard.onCoatChange);
+  window.colorizeElement(userEyes, window.data.EYE_COLORS, window.wizard.onEyesChange);
   window.colorizeElement(userFireball, window.data.FIREBALL_COLORS, changeElementBackground);
-
 
   // работа с сервером
   window.backend.load(succesHandler, errorHandler); // загрузка данных с сервера
